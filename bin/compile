@@ -47,6 +47,7 @@ cd "${build}/"
 for map in $(find . -name '*.js.map' -not -path './node_modules/*' -not -path './.heroku/*' | cut -c 3-); do
     sum=$(sha1sum "./${map}" | cut -c -40)
     name="~/${map}"
+    short_name=`echo ${map} | cut -c 8-`
     
     # Check if we have a '.next' directory for Next.js
     # Need to modify $name to represent with BUILD_ID from Next.js
@@ -64,7 +65,7 @@ for map in $(find . -name '*.js.map' -not -path './node_modules/*' -not -path '.
              -X POST \
              -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
              -F file=@"${map}" \
-             -F name="${name}" \
+             -F name="~/${short_name}" \
              >/dev/null
 
     elif [[ "${res[1]}" != "${sum}" ]]; then
@@ -77,7 +78,7 @@ for map in $(find . -name '*.js.map' -not -path './node_modules/*' -not -path '.
              -X POST \
              -H "Authorization: Bearer ${SENTRY_AUTH_TOKEN}" \
              -F file=@"${map}" \
-             -F name="${name}" \
+             -F name="~/${short_name}" \
              >/dev/null
 
     else
