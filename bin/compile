@@ -89,4 +89,3 @@ done
 rm "${files}"
 
 echo "       Done!"
-{"mode":"full","isActive":false}
